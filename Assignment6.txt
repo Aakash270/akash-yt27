@@ -1,0 +1,152 @@
+//Write a program to simulate memory placement strategies –best fit, first fit, next fit and worst fit.
+
+
+
+
+import java.util.*;
+public class spos6 {
+    void firstfit(int[] blocksize, int m, int[] processsize, int n){
+        int[] allocate = new int[n];
+        Arrays.fill(allocate, -1);
+        for (int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if (blocksize[j] >= processsize[i]) {
+                    allocate[i] = j;
+                    blocksize[j] -= processsize[i];
+                    break;
+                }
+            }
+        }
+        System.out.println("Process no.\tProcess size\tBlock no.");
+        for (int i = 0; i < n; i++) {
+            System.out.print(" "+(i+1)+" \t\t\t\t"+processsize[i]+" \t\t\t\t");
+            if (allocate[i] == -1) {
+                System.out.print("Not Allocated");
+            }
+            else{
+                System.out.print(allocate[i] + 1);
+            }
+            System.out.println();
+        }
+    }
+    void nextfit(int[] blocksize, int m, int[] processsize, int n){
+        int[] allocate = new int[n];
+        int j = 0;
+        int t = m - 1;
+        Arrays.fill(allocate, -1);
+        for (int i = 0; i < n; i++) {
+            while (j < m) {
+                if (blocksize[j] > processsize[i]) {
+                    allocate[i] = j;
+                    blocksize[j] -= processsize[i];
+                    t = (j + m - 1) % m;
+                    break;
+                }
+                if (t == j) {
+                    t = (j + m - 1) % m;
+                    break;
+                }
+                j = (j + 1) % m;
+            }
+        }
+        System.out.println("Process no.\tProcess size\tBlock no.");
+        for (int i = 0; i < n; i++) {
+            System.out.print(" "+(i+1)+" \t\t\t\t"+processsize[i]+" \t\t\t\t");
+            if (allocate[i] == -1) {
+                System.out.print("Not Allocated");
+            }
+            else{
+                System.out.print(allocate[i] + 1);
+            }
+            System.out.println();
+        }
+    }
+    void bestfit(int[] blocksize, int m, int[] processsize, int n){
+        int[] allocate = new int[n];
+        Arrays.fill(allocate, -1);
+        for (int i = 0; i < n; i++) {
+            int bestblock = -1;
+            int min = 9999;
+            for(int j = 0; j < m; j++) {
+                if (blocksize[j] >= processsize[i]) {
+                    int current = blocksize[j] - processsize[i];
+                    if (current < min) {
+                        min = current;
+                        bestblock = j;
+                    }
+                }
+            }
+            if (bestblock != -1) {
+                allocate[i] = bestblock;
+                blocksize[bestblock] -= processsize[i];
+            }
+        }
+        System.out.println("Process no.\tProcess size\tBlock no.");
+        for (int i = 0; i < n; i++) {
+            System.out.print(" "+(i+1)+" \t\t\t\t"+processsize[i]+" \t\t\t\t");
+            if (allocate[i] == -1) {
+                System.out.print("Not Allocated");
+            }
+            else{
+                System.out.print(allocate[i] + 1);
+            }
+            System.out.println();
+        }
+    }
+    void worstfit(int[] blocksize, int m, int[] processsize, int n){
+        int[] allocate = new int[n];
+        Arrays.fill(allocate, -1);
+        for (int i = 0; i < n; i++) {
+            int worstblock = -1;
+            int max = -1;
+            for(int j = 0; j < m; j++) {
+                if (blocksize[j] >= processsize[i]) {
+                    int current = blocksize[j] - processsize[i];
+                    if (current > max) {
+                        max = current;
+                        worstblock = j;
+                    }
+                }
+            }
+            if (worstblock != -1) {
+                allocate[i] = worstblock;
+                blocksize[worstblock] -= processsize[i];
+            }
+        }
+        System.out.println("Process no.\tProcess size\tBlock no.");
+        for (int i = 0; i < n; i++) {
+            System.out.print(" "+(i+1)+" \t\t\t\t"+processsize[i]+" \t\t\t\t");
+            if (allocate[i] == -1) {
+                System.out.print("Not Allocated");
+            }
+            else{
+                System.out.print(allocate[i] + 1);
+            }
+            System.out.println();
+        }
+    }
+    public static void main(String[] args) {
+        spos6 obj = new spos6();
+        Scanner sc = new Scanner(System.in);
+        int[] blocksize = {5, 10, 20};
+        int[] processsize = {10, 20, 5};
+        int m = blocksize.length;
+        int n = processsize.length;
+        
+        System.out.print("Output of firstfit:\n");
+                obj.firstfit(blocksize, m, processsize, n);
+               
+        System.out.print("Output of nextfit:\n");
+               obj.nextfit(blocksize, m, processsize, n);
+                
+        System.out.print("Output of bestfit:\n");
+              obj.bestfit(blocksize, m, processsize, n);
+         
+         System.out.print("Output of worstfit:\n");       
+                obj.worstfit(blocksize, m, processsize, n);
+               
+        
+        sc.close();
+       
+    }
+}

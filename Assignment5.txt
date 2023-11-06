@@ -1,0 +1,155 @@
+import java.util.Scanner;
+
+public class spos5 
+{
+    
+
+    public static void fcfs() {
+        Scanner sc = new Scanner(System.in);
+        int n, avgWaiting = 0, avgTurnaround = 0;
+
+        System.out.print("Enter number of processes: ");
+        n = sc.nextInt();
+
+        int[] burstTime = new int[n];
+        int[] waitingTime = new int[n];
+        int[] turnaroundTime = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter Burst Time for Process " + (i + 1) + ": ");
+            burstTime[i] = sc.nextInt();
+            waitingTime[i] = (i == 0) ? 0 : waitingTime[i - 1] + burstTime[i - 1];
+            avgWaiting += waitingTime[i];
+            turnaroundTime[i] = waitingTime[i] + burstTime[i];
+            avgTurnaround += turnaroundTime[i];
+        }
+
+        avgWaiting /= n;
+        avgTurnaround /= n;
+
+        System.out.println("Process No.\tBurst\tWait\tTurn");
+        for (int i = 0; i < n; i++) {
+            System.out.println("Process " + (i + 1) + "\t" + burstTime[i] + "\t" + waitingTime[i] + "\t" + turnaroundTime[i]);
+        }
+        System.out.println("Average Waiting Time: " + avgWaiting);
+        System.out.println("Average Turn Around Time: " + avgTurnaround);
+
+        sc.close();
+    }
+
+    public static void roundRobin() {
+        Scanner sc1 = new Scanner(System.in);
+        int n, avgWaiting = 0, avgTurnaround = 0;
+
+        System.out.print("Enter number of processes: ");
+        n = sc1.nextInt();
+
+        int[] burstTime = new int[n];
+        int[] remainingTime = new int[n];
+        int[] waitingTime = new int[n];
+        int timeQuantum;
+
+        System.out.print("Enter Time Quantum: ");
+        timeQuantum = sc1.nextInt();
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter Burst Time for Process " + (i + 1) + ": ");
+            burstTime[i] = remainingTime[i] = sc1.nextInt();
+        }
+
+        int currentTime = 0;
+        while (true) {
+            boolean done = true;
+            for (int i = 0; i < n; i++) {
+                if (remainingTime[i] > 0) {
+                    done = false;
+                    if (remainingTime[i] > timeQuantum) {
+                        currentTime += timeQuantum;
+                        remainingTime[i] -= timeQuantum;
+                    } else {
+                        currentTime += remainingTime[i];
+                        waitingTime[i] = currentTime - burstTime[i];
+                        remainingTime[i] = 0;
+                    }
+                }
+            }
+            if (done) {
+                break;
+            }
+        }
+
+        int[] turnaroundTime = new int[n];
+        for (int i = 0; i < n; i++) {
+            turnaroundTime[i] = burstTime[i] + waitingTime[i];
+            avgWaiting += waitingTime[i];
+            avgTurnaround += turnaroundTime[i];
+        }
+
+        avgWaiting /= n;
+        avgTurnaround /= n;
+
+        System.out.println("Process No.\tBurst\tWait\tTurn");
+        for (int i = 0; i < n; i++) {
+            System.out.println("Process " + (i + 1) + "\t" + burstTime[i] + "\t" + waitingTime[i] + "\t" + turnaroundTime[i]);
+        }
+        System.out.println("Average Waiting Time: " + avgWaiting);
+        System.out.println("Average Turn Around Time: " + avgTurnaround);
+
+        sc1.close();
+    }
+
+    public static void sjf() {
+        Scanner sc2 = new Scanner(System.in);
+        int n, avgWaiting = 0, avgTurnaround = 0;
+
+        System.out.print("Enter number of processes: ");
+        n = sc2.nextInt();
+
+        int[] burstTime = new int[n];
+        int[] waitingTime = new int[n];
+        int[] turnaroundTime = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter Burst Time for Process " + (i + 1) + ": ");
+            burstTime[i] = sc2.nextInt();
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (burstTime[i] > burstTime[j]) {
+                    int temp = burstTime[i];
+                    burstTime[i] = burstTime[j];
+                    burstTime[j] = temp;
+                }
+            }
+            waitingTime[i] = (i == 0) ? 0 : waitingTime[i - 1] + burstTime[i - 1];
+            avgWaiting += waitingTime[i];
+            turnaroundTime[i] = waitingTime[i] + burstTime[i];
+            avgTurnaround += turnaroundTime[i];
+        }
+
+        avgWaiting /= n;
+        avgTurnaround /= n;
+
+        System.out.println("Process No.\tBurst\tWait\tTurn");
+        for (int i = 0; i < n; i++) {
+            System.out.println("Process " + (i + 1) + "\t" + burstTime[i] + "\t" + waitingTime[i] + "\t" + turnaroundTime[i]);
+        }
+        System.out.println("Average Waiting Time: " + avgWaiting);
+        System.out.println("Average Turn Around Time: " + avgTurnaround);
+
+        sc2.close();
+    }
+    public static void main(String[] args) 
+    {
+        
+                   fcfs();
+                   
+                   //roundRobin();
+                    
+                   //sjf();
+                    
+
+        
+    }
+}

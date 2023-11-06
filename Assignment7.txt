@@ -1,0 +1,69 @@
+//Write a program to simulate Page replacement algorithm.
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class PageRep 
+{
+public:
+    string pageString;
+    int memorySize;
+    vector<int> memory;
+
+    void simulate(string algorithm) 
+    {
+        int hit = 0, miss = 0;
+        int memPtr = 0;
+        memory.resize(memorySize, -1);
+
+        cout << algorithm << ":" << endl;
+
+        for (char pageChar : pageString) 
+        {
+            int page = pageChar - '0';
+            bool flag = false;
+
+            for (int j = 0; j < memorySize; j++) 
+            {
+                if (page == memory[j]) 
+                {
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag) 
+            {
+                hit++;
+            } 
+            else 
+            {
+                miss++;
+                memory[memPtr] = page;
+                memPtr = (memPtr + 1) % memorySize;
+            }
+
+            for (int j = 0; j < memorySize; j++) {
+                cout << memory[j] << "|";
+            }
+            cout << endl;
+        }
+
+        cout << algorithm << " Hits: " << hit << endl;
+        cout << algorithm << " Miss: " << miss << endl;
+    }
+};
+
+int main() {
+    PageRep obj;
+    cout << "Enter the page string: " << endl;
+    cin >> obj.pageString;
+    cout << "Enter the memory size: " << endl;
+    cin >> obj.memorySize;
+
+    obj.simulate("FIFO");
+    obj.simulate("LRU");
+    obj.simulate("Optimal");
+
+    return 0;
+}
